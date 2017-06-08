@@ -1,7 +1,7 @@
 # PyChromeDevTools
 
 # 1. Description
-PyChromeDevTools is a python module that allows one to interact using Chrome DevTools Protocol within a Python script.
+PyChromeDevTools is a python module that allows one to interact using [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) within a Python script.
 To use this tool, you must run Google Chrome with the `remote-debugging` option, like in the following example.
 ```
 google-chrome --remote-debugging-port=9222
