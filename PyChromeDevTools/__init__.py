@@ -9,8 +9,6 @@ import websocket
 
 TIMEOUT = 1
 
-message_id = 0
-
 
 class GenericElement(object):
     def __init__(self, name, parent):
@@ -18,13 +16,14 @@ class GenericElement(object):
         self.parent = parent
 
     def __getattr__(self, attr):
-        func_name = self.name + "." + attr
+        func_name = '{}.{}'.format(self.name, attr)
 
         def generic_function(**args):
-            global message_id
             self.parent.pop_messages()
-            message_id += 1
-            call_obj = {"id": message_id, "method": func_name, "params": args}
+            self.parent.message_counter += 1
+            message_id = int('{}{}'.format(id(self), self.parent.message_counter))
+            message_id = self.parent.message_counter
+            call_obj = {'id': message_id, 'method': func_name, 'params': args}
             self.parent.ws.send(json.dumps(call_obj))
             result, _ = self.parent.wait_result(message_id)
             return result
@@ -32,40 +31,46 @@ class GenericElement(object):
 
 
 class ChromeInterface(object):
-    def __init__(self, host='localhost', port=9222, tab=0):
+    message_counter = 0
+
+    def __init__(self, host='localhost', port=9222, tab=0, timeout=TIMEOUT):
         self.host = host
         self.port = port
         self.ws = None
         self.tabs = None
-        self.get_tabs()
-        self.connect(tab=tab)
+        self.timeout = timeout
+        self.connect(tab=tab, update_tabs=True)
 
     def get_tabs(self):
-        response = requests.get("http://%s:%s/json" % (self.host, self.port))
+        response = requests.get('http://{}:{}/json'.format(self.host, self.port))
         self.tabs = json.loads(response.text)
 
     def connect(self, tab=0, update_tabs=True):
+        if update_tabs:
+            self.get_tabs()
         wsurl = self.tabs[tab]['webSocketDebuggerUrl']
         self.ws = websocket.create_connection(wsurl)
-        self.ws.settimeout(TIMEOUT)
+        self.ws.settimeout(self.timeout)
 
     def close(self):
         if self.ws:
             self.ws.close()
 
     # Blocking
-    def wait_message(self, timeout=TIMEOUT):
+    def wait_message(self, timeout=None):
+        timeout = timeout if timeout is not None else self.timeout
         self.ws.settimeout(timeout)
         try:
             message = self.ws.recv()
         except:
-            self.ws.settimeout(TIMEOUT)
             return None
-        self.ws.settimeout(TIMEOUT)
+        finally:
+            self.ws.settimeout(self.timeout)
         return json.loads(message)
 
     # Blocking
-    def wait_event(self, event, timeout=TIMEOUT):
+    def wait_event(self, event, timeout=None):
+        timeout = timeout if timeout is not None else self.timeout
         start_time = time.time()
         messages = []
         matching_message = None
@@ -77,7 +82,7 @@ class ChromeInterface(object):
                 message = self.ws.recv()
                 parsed_message = json.loads(message)
                 messages.append(parsed_message)
-                if "method" in parsed_message and parsed_message["method"] == event:
+                if 'method' in parsed_message and parsed_message['method'] == event:
                     matching_message = parsed_message
                     break
             except:
@@ -85,7 +90,8 @@ class ChromeInterface(object):
         return (matching_message, messages)
 
     # Blocking
-    def wait_result(self, result_id, timeout=TIMEOUT):
+    def wait_result(self, result_id, timeout=None):
+        timeout = timeout if timeout is not None else self.timeout
         start_time = time.time()
         messages = []
         matching_result = None
@@ -97,7 +103,7 @@ class ChromeInterface(object):
                 message = self.ws.recv()
                 parsed_message = json.loads(message)
                 messages.append(parsed_message)
-                if "result" in parsed_message and parsed_message["id"] == result_id:
+                if 'result' in parsed_message and parsed_message['id'] == result_id:
                     matching_result = parsed_message
                     break
             except:
@@ -114,7 +120,7 @@ class ChromeInterface(object):
                 messages.append(json.loads(message))
             except:
                 break
-        self.ws.settimeout(TIMEOUT)
+        self.ws.settimeout(self.timeout)
         return messages
 
     def __getattr__(self, attr):

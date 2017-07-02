@@ -15,5 +15,5 @@ setup(
     maintainer_email="martino.trevisan@polito.it",
     url="https://github.com/marty90/PyChromeDevTools",
     packages=['PyChromeDevTools'],
-    install_requires=['requests', 'websocket']
+    install_requires=['requests', 'websocket-client']
 )
