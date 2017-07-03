@@ -39,16 +39,17 @@ class ChromeInterface(object):
         self.ws = None
         self.tabs = None
         self.timeout = timeout
-        self.connect(tab=tab, update_tabs=True)
+        self.connect(tab=tab)
 
     def get_tabs(self):
         response = requests.get('http://{}:{}/json'.format(self.host, self.port))
         self.tabs = json.loads(response.text)
 
     def connect(self, tab=0, update_tabs=True):
-        if update_tabs:
+        if update_tabs or self.tabs is None:
             self.get_tabs()
         wsurl = self.tabs[tab]['webSocketDebuggerUrl']
+        self.close()
         self.ws = websocket.create_connection(wsurl)
         self.ws.settimeout(self.timeout)
 
