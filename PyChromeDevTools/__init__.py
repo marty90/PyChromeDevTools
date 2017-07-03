@@ -33,13 +33,14 @@ class GenericElement(object):
 class ChromeInterface(object):
     message_counter = 0
 
-    def __init__(self, host='localhost', port=9222, tab=0, timeout=TIMEOUT):
+    def __init__(self, host='localhost', port=9222, tab=0, timeout=TIMEOUT, auto_connect=True):
         self.host = host
         self.port = port
         self.ws = None
         self.tabs = None
         self.timeout = timeout
-        self.connect(tab=tab)
+        if auto_connect:
+            self.connect(tab=tab)
 
     def get_tabs(self):
         response = requests.get('http://{}:{}/json'.format(self.host, self.port))
