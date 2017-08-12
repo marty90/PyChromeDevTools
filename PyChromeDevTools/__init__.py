@@ -56,7 +56,7 @@ class ChromeInterface(object):
 
     def conntect_targetID(self, targetID):
         try:
-            wsurl = '"ws://{}:{}/devtools/page/{}'.format(self.host, self.port, targetID)
+            wsurl = 'ws://{}:{}/devtools/page/{}'.format(self.host, self.port, targetID)
             self.close()
             self.ws = websocket.create_connection(wsurl)
             self.ws.settimeout(self.timeout)
