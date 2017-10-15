@@ -11,7 +11,7 @@ You may want to enable further Chrome benchmarking capabilities using the `--ena
 For information about this Readme file and this tool please write to
 [martino.trevisan@polito.it](mailto:martino.trevisan@polito.it)
 
-# 2. Prerequisites
+# 2. Prerequisites and Installation
 Very few dependencies must be satisfied: an updated Google-Chrome version and the python packages `requests` and `websocket`.
 You can install them using the `pip` tool.
 
