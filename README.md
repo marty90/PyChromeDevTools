@@ -15,6 +15,15 @@ For information about this Readme file and this tool please write to
 Very few dependencies must be satisfied: an updated Google-Chrome version and the python packages `requests` and `websocket`.
 You can install them using the `pip` tool.
 
+You can install `PyChromeDevTools` issuing the git command:
+```
+git clone https://github.com/marty90/PyChromeDevTools
+```
+Or, better, you install it and its dependencies by using `pip`:
+```
+sudo pip3 install requests websocket git+git://github.com/marty90/PyChromeDevTools.git
+```
+
 # 3. Operation
 ## 3.1 Init
 In your python script, as first, you must create a ChromeInterface object, like in the following:
