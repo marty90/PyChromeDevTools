@@ -36,6 +36,10 @@ chrome = PyChromeDevTools.ChromeInterface(host="1.1.1.1",port=1234)
 ```
 By default it uses `localhost:9222`.
 
+You can connect directly to a `targetID` using the method `connect_targetID`. 
+You must pass the `targetID` as parameter to this function.
+In this case, you avoid querying the json and finding the `tab id`. 
+
 ## 3.1 Run commands
 To send a command to Chrome, just invoke the corresponding method on the ChromeInterface object, and pass the desired parameters.
 For example, to visit a page write:
