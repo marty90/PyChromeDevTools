@@ -21,7 +21,7 @@ git clone https://github.com/marty90/PyChromeDevTools
 ```
 Or, better, you install it and its dependencies by using `pip`:
 ```
-sudo pip3 install requests websocket git+git://github.com/marty90/PyChromeDevTools.git
+sudo pip3 install requests websocket-client git+git://github.com/marty90/PyChromeDevTools.git
 ```
 
 # 3. Operation
