@@ -14,6 +14,7 @@ setup(
     maintainer="Martino Trevisan",
     maintainer_email="martino.trevisan@polito.it",
     url="https://github.com/marty90/PyChromeDevTools",
+    download_url = 'https://github.com/marty90/PyChromeDevTools/tarball/1.0.1',
     packages=['PyChromeDevTools'],
     install_requires=['requests', 'websocket-client']
 )
