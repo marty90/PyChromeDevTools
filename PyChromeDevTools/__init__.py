@@ -98,6 +98,8 @@ class ChromeInterface(object):
                 if 'method' in parsed_message and parsed_message['method'] == event:
                     matching_message = parsed_message
                     break
+            except websocket.WebSocketTimeoutException:
+                continue
             except:
                 break
         return (matching_message, messages)
@@ -119,6 +121,8 @@ class ChromeInterface(object):
                 if 'result' in parsed_message and parsed_message['id'] == result_id:
                     matching_result = parsed_message
                     break
+            except websocket.WebSocketTimeoutException:
+                continue
             except:
                 break
         return (matching_result, messages)
