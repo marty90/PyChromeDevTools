@@ -8,7 +8,7 @@ setup(
     name="PyChromeDevTools",
     description="PyChromeDevTools : Interact with Google Chrome using the Chrome DevTools Protocol.",
     license="Apache License 2.0",
-    version="0.1",
+    version="0.2",
     author="Martino Trevisan",
     author_email="martino.trevisan@polito.it",
     maintainer="Martino Trevisan",
