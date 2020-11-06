@@ -25,8 +25,8 @@ class GenericElement(object):
             message_id = self.parent.message_counter
             call_obj = {'id': message_id, 'method': func_name, 'params': args}
             self.parent.ws.send(json.dumps(call_obj))
-            result, _ = self.parent.wait_result(message_id)
-            return result
+            result, messages = self.parent.wait_result(message_id)
+            return result, messages
         return generic_function
 
 

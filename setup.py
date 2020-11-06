@@ -8,7 +8,7 @@ setup(
     name="PyChromeDevTools",
     description="PyChromeDevTools : Interact with Google Chrome using the Chrome DevTools Protocol.",
     license="Apache License 2.0",
-    version="0.2",
+    version="0.3",
     author="Martino Trevisan",
     author_email="martino.trevisan@polito.it",
     maintainer="Martino Trevisan",
@@ -18,3 +18,10 @@ setup(
     packages=['PyChromeDevTools'],
     install_requires=['requests', 'websocket-client']
 )
+
+# Upload on pip with:
+# Create new version
+# python setup.py sdist
+# twine upload dist/*
+
+# Test it locally removing the pip installed one

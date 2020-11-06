@@ -44,9 +44,10 @@ In this case, you avoid querying the json and finding the `tab id`.
 To send a command to Chrome, just invoke the corresponding method on the ChromeInterface object, and pass the desired parameters.
 For example, to visit a page write:
 ```
-chrome.Page.navigate(url="http://example.com/")
+return_value, messages = chrome.Page.navigate(url="http://example.com/")
 ```
 The return value of the command is passed as return value of the function, already interpreted as JSON.
+In messages, there are all the messages received before.
 
 ## 3.1 Receive Events
 Chrome sends back messages for particular events in the browser.
