@@ -108,7 +108,7 @@ chrome.wait_event("Page.frameStoppedLoading", timeout=60)
 #Wait last objects to load
 time.sleep(5)
 
-cookies=chrome.Network.getCookies()
+cookies,messages = chrome.Network.getCookies()
 for cookie in cookies["result"]["cookies"]:
     print ("Cookie:")
     print ("\tDomain:", cookie["domain"])
