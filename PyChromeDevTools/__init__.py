@@ -21,7 +21,6 @@ class GenericElement(object):
         def generic_function(**args):
             self.parent.pop_messages()
             self.parent.message_counter += 1
-            message_id = int('{}{}'.format(id(self), self.parent.message_counter))
             message_id = self.parent.message_counter
             call_obj = {'id': message_id, 'method': func_name, 'params': args}
             self.parent.ws.send(json.dumps(call_obj))
@@ -33,7 +32,14 @@ class GenericElement(object):
 class ChromeInterface(object):
     message_counter = 0
 
-    def __init__(self, host='localhost', port=9222, tab=0, timeout=TIMEOUT, auto_connect=True):
+    def __init__(
+        self,
+        host='localhost',
+        port=9222,
+        tab=0,
+        timeout=TIMEOUT,
+        auto_connect=True
+    ):
         self.host = host
         self.port = port
         self.ws = None
@@ -43,7 +49,7 @@ class ChromeInterface(object):
             self.connect(tab=tab)
 
     def get_tabs(self):
-        response = requests.get('http://{}:{}/json'.format(self.host, self.port))
+        response = requests.get(f'http://{self.host}:{self.port}/json')
         self.tabs = json.loads(response.text)
 
     def connect(self, tab=0, update_tabs=True):
@@ -56,15 +62,15 @@ class ChromeInterface(object):
 
     def connect_targetID(self, targetID):
         try:
-            wsurl = 'ws://{}:{}/devtools/page/{}'.format(self.host, self.port, targetID)
+            wsurl = f'ws://{self.host}:{self.port}/devtools/page/{targetID}'
             self.close()
             self.ws = websocket.create_connection(wsurl)
             self.ws.settimeout(self.timeout)
-        except:
+        except Exception:
             wsurl = self.tabs[0]['webSocketDebuggerUrl']
             self.ws = websocket.create_connection(wsurl)
-            self.ws.settimeout(self.timeout)    
-        
+            self.ws.settimeout(self.timeout)
+
     def close(self):
         if self.ws:
             self.ws.close()
@@ -75,7 +81,7 @@ class ChromeInterface(object):
         self.ws.settimeout(timeout)
         try:
             message = self.ws.recv()
-        except:
+        except Exception:
             return None
         finally:
             self.ws.settimeout(self.timeout)
@@ -95,14 +101,15 @@ class ChromeInterface(object):
                 message = self.ws.recv()
                 parsed_message = json.loads(message)
                 messages.append(parsed_message)
-                if 'method' in parsed_message and parsed_message['method'] == event:
+                if ('method' in parsed_message
+                        and parsed_message['method'] == event):
                     matching_message = parsed_message
                     break
             except websocket.WebSocketTimeoutException:
                 continue
-            except:
+            except Exception:
                 break
-        return (matching_message, messages)
+        return matching_message, messages
 
     # Blocking
     def wait_result(self, result_id, timeout=None):
@@ -118,14 +125,15 @@ class ChromeInterface(object):
                 message = self.ws.recv()
                 parsed_message = json.loads(message)
                 messages.append(parsed_message)
-                if 'result' in parsed_message and parsed_message['id'] == result_id:
+                if ('result' in parsed_message
+                        and parsed_message['id'] == result_id):
                     matching_result = parsed_message
                     break
             except websocket.WebSocketTimeoutException:
                 continue
-            except:
+            except Exception:
                 break
-        return (matching_result, messages)
+        return matching_result, messages
 
     # Non Blocking
     def pop_messages(self):
@@ -135,7 +143,7 @@ class ChromeInterface(object):
             try:
                 message = self.ws.recv()
                 messages.append(json.loads(message))
-            except:
+            except Exception:
                 break
         self.ws.settimeout(self.timeout)
         return messages
