@@ -4,7 +4,7 @@
 PyChromeDevTools is a python module that allows one to interact with Google Chrome using [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) within a Python script.
 To use this tool, you must run an instance of Google Chrome with the `remote-debugging` option, like in the following example.
 ```
-google-chrome --remote-debugging-port=9222
+google-chrome --remote-debugging-port=9222 --remote-allow-origins=*
 ```
 You may want to enable further Chrome benchmarking capabilities using the `--enable-benchmarking` and `--enable-net-benchmarking` options. You can run Chrome in headless mode using the option `--headless`.
 
