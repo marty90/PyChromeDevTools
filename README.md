@@ -36,6 +36,8 @@ chrome = PyChromeDevTools.ChromeInterface(host="1.1.1.1",port=1234)
 ```
 By default it uses `localhost:9222`.
 
+**Note for Android:** The `ChromeInterface()` constructor accepts the `suppress_origin` argument which defaults to `False`. Set it to `True` to suppress the Origin Header in the created websockets. This is apparently needed in Android environments.
+
 You can connect directly to a `targetID` using the method `connect_targetID`. 
 You must pass the `targetID` as parameter to this function.
 In this case, you avoid querying the json and finding the `tab id`. 

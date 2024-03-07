@@ -38,13 +38,16 @@ class ChromeInterface(object):
         port=9222,
         tab=0,
         timeout=TIMEOUT,
-        auto_connect=True
+        auto_connect=True,
+        suppress_origin=False
     ):
         self.host = host
         self.port = port
         self.ws = None
         self.tabs = None
         self.timeout = timeout
+        self.suppress_origin = suppress_origin
+
         if auto_connect:
             self.connect(tab=tab)
 
@@ -57,7 +60,7 @@ class ChromeInterface(object):
             self.get_tabs()
         wsurl = self.tabs[tab]['webSocketDebuggerUrl']
         self.close()
-        self.ws = websocket.create_connection(wsurl)
+        self.ws = websocket.create_connection(wsurl, suppress_origin=self.suppress_origin)
         self.ws.settimeout(self.timeout)
 
     def connect_targetID(self, targetID):
