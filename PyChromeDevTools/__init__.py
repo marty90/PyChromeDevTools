@@ -67,11 +67,11 @@ class ChromeInterface(object):
         try:
             wsurl = f'ws://{self.host}:{self.port}/devtools/page/{targetID}'
             self.close()
-            self.ws = websocket.create_connection(wsurl)
+            self.ws = websocket.create_connection(wsurl, suppress_origin=self.suppress_origin)
             self.ws.settimeout(self.timeout)
         except Exception:
             wsurl = self.tabs[0]['webSocketDebuggerUrl']
-            self.ws = websocket.create_connection(wsurl)
+            self.ws = websocket.create_connection(wsurl, suppress_origin=self.suppress_origin)
             self.ws.settimeout(self.timeout)
 
     def close(self):
